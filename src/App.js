@@ -6,17 +6,20 @@ import { BrowserRouter as Router, Switch, Route, Link, BrowserRouter, Redirect }
 // import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 
 class App extends React.Component {
+  state = {
+    loggedIn: false
+  }
 
   handleLogin = (e) => {
     e.preventDefault()
     let user = {
       name: e.target[0].value,
-      password: e.target[1].value
+      password: e.target[2].value
     }
 
     let reqPackage = {
       method: 'POST',
-      headers:{
+      headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
       },
@@ -24,21 +27,20 @@ class App extends React.Component {
     }
 
     fetch('http://localhost:3000/api/v1/login', reqPackage)
-    .then(res => res.json())
-    .then(data=> {
-      // localStorage.token = data.token
-      localStorage.setItem("token", data.token)
-      // this.getDragons()
-      
-
-    })
+      .then(res => res.json())
+      .then(data => {
+        // localStorage.token = data.token
+        localStorage.setItem("token", data.token)
+        // this.getDragons()
+        this.setState({ loggedIn: true })
+      })
   }
-  handleLogout = () =>{
+  handleLogout = () => {
     // clear localstorage
     console.log('clear localstorage')
     localStorage.clear()
     // redirect 
-    
+    this.setState({ loggedIn: false })
   }
 
   // componentDidMount() {
@@ -61,21 +63,26 @@ class App extends React.Component {
   // }
 
   render() {
-
-    if(!window.localStorage.token){
-      return(<LogIn handleLogin={this.handleLogin}/>)
-    }
-
+    console.log(this.state.loggedIn)
+    // if (this.state.loggedIn) {
+    //   return (<BrowserRouter><Route exact path="/login">{<LogIn handleLogin={this.handleLogin} />}</Route></BrowserRouter>)
+    // }
     return (
       <div className="App">
-      <BrowserRouter>
-        <Switch>
-          <Route exact path="/home">
-            <Home />
-          </Route>
-        </Switch>
-      </BrowserRouter>
-    </div>
+        <BrowserRouter>
+          <Switch>
+
+            <Route exact path="/home">
+              <Home />
+            </Route>
+
+            <Route exact path="/login">
+              <LogIn handleLogin={this.handleLogin} />
+            </Route>
+
+          </Switch>
+        </BrowserRouter>
+      </div>
     )
   }
 }
