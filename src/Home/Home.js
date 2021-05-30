@@ -1,5 +1,7 @@
 
-import React from 'react';
+import React
+// , {useState}  
+from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 // import CameraIcon from '@material-ui/icons/PhotoCamera';
@@ -14,6 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
+// import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 
 function Copyright() {
   return (
@@ -60,14 +63,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const cards = [1, 2, 3, 4, 5, 6];
-
 export default function Home(props) {
+
+  // console.log(props.allResturaunts.split(" "))
+  const cards = [props.allResturaunts]; //comeback 2
   const classes = useStyles();
-
-
-    props.test()
-  
 
   return (
     <React.Fragment>
@@ -75,9 +75,9 @@ export default function Home(props) {
       <AppBar position="relative">
         <Toolbar>
           {/* <CameraIcon className={classes.icon} /> */}
-          <Typography variant="h6" color="inherit" noWrap>
-            Eats.
-          </Typography>
+          <Button variant="contained" color="primary" onClick={()=>props.handleLogout()}>
+            Log Out
+          </Button>
         </Toolbar>
       </AppBar>
       <main>
@@ -85,16 +85,16 @@ export default function Home(props) {
         <div className={classes.heroContent}>
           <Container maxWidth="sm">
             <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-              Home Page
+              Welcome to EATS.
             </Typography>
             <Typography variant="h5" align="center" color="textSecondary" paragraph>
-                Food you might like based on your answers
+              Here are some food near you, click one of the buttons below to get started
             </Typography>
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">
                 <Grid item>
-                  <Button variant="contained" color="primary">
-                    Im hungry!
+                  <Button variant="contained" color="primary" onClick={()=>props.populate()}>
+                    Personalize food near me
                   </Button>
                 </Grid>
                 <Grid item>
@@ -108,18 +108,18 @@ export default function Home(props) {
         </div>
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
-          <Grid container spacing={4}>
+          <Grid container spacing={5}>
             {cards.map((card) => (
               <Grid item key={card} xs={12} sm={6} md={4}>
+                {/* -------------------card-------------------------------------- */}
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}
                     image="https://source.unsplash.com/1000x1000/?food"
-                    title="Image title"
                   />
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Resturaunt Name 
+                      {card.mom}
                     </Typography>
                     <Typography>
                       Resturaunt Description
@@ -134,6 +134,8 @@ export default function Home(props) {
                     </Button>
                   </CardActions>
                 </Card>
+                {/* -------------------------card end-------------------------------- */}
+
               </Grid>
             ))}
           </Grid>

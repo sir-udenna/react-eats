@@ -2,14 +2,15 @@ import React from 'react';
 import './App.css';
 import LogIn from './Login/Login'
 import Home from './Home/Home'
-import  { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 import { withRouter } from "react-router-dom";
 // Redirect, Link, Router,
 
 class App extends React.Component {
   state = {
-    loggedIn: false
+    loggedIn: false,
+    resturaunts: []
   }
 
   handleLogin = (e) => {
@@ -31,7 +32,6 @@ class App extends React.Component {
     fetch('http://localhost:3000/api/v1/login', reqPackage)
       .then(res => res.json())
       .then(data => {
-        // localStorage.token = data.token
         localStorage.setItem("token", data.token)
         this.getResturaunts()
         this.setState({ loggedIn: true })
@@ -39,71 +39,53 @@ class App extends React.Component {
       })
   }
   handleLogout = () => {
-    // clear localstorage
     console.log('clear localstorage')
     localStorage.clear()
-    // redirect 
-    this.setState({ loggedIn: false })
   }
 
   getResturaunts = () => {
-    fetch('http://localhost:3000/api/v1/restaurants', {
+    fetch('http://localhost:3000/api/v1/yelp_restaurants/', {
       method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Authorization": `Bearer ${localStorage.token}`
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer TfAfZ9CEBvQhMOvO5CcgbnmVNh4raReuVs6pQ5T9feqpz8_QmXw-R1kWfxJTvMoE5d7mGrencCzHmRCR2alxB2whr8GMm0byjI22x0kia_u2TgHwPLdrwO31RBSwYHYx'
       }
     })
       .then(res => res.json())
-      .then(res => console.log(res))
+      .then(data => this.setState({ resturaunts: data.result.businesses }))
+      console.log(this.state.resturaunts)
+
+    if (this.state.loggedIn === false) {
+      this.setState({ loggedIn: true })
+    } else {
+      console.log('already logged in')
+    }
   }
 
-  // componentDidMount() {
-
-  // fetch("https://travel-advisor.p.rapidapi.com/restaurants/list-by-latlng?latitude=29.7407&longitude=-95.4636&limit=5&currency=USD&distance=2&open_now=false&lunit=mi&lang=en_US", {
-  //   "method": "GET",
-  //   "headers": {
-  //     "x-rapidapi-key": "b8ff6ed078msh07057e8dba637a4p181fb2jsn24c2f0f4eeb7",
-  //     "x-rapidapi-host": "travel-advisor.p.rapidapi.com"
-  //   }
-  // })
-  // .then(response => response.json())
-  // .then(response => {
-  //   console.log(response);
-  // })
-  // .catch(err => {
-  //   console.error(err);
-  // });
-  // }
-
   render() {
-    console.log(this.state.loggedIn)
-
     return (
       <div className="App">
-            {localStorage.token ? (
-              <Switch>
-              <Route exact path="/home">
-                <Home test={this.getResturaunts} />
-              </Route>
-              </Switch>
-            ) : (
-              <Switch>
+        {localStorage.token ? (
+          <Switch>
+            <Route exact path="/home">
+              <Home allResturaunts={this.state.resturaunts} handleLogout={this.handleLogout} populate={this.getResturaunts} />
+            </Route>
+          </Switch>
+        ) : (
+          <Switch>
             <Route exact path="/login">
               <LogIn handleLogin={this.handleLogin} />
+              <Redirect to="/login" handleLogin={this.handleLogin} />
             </Route>
-            <Redirect to="/login" />
-            </Switch>
-            )}
+          </Switch>
+        )}
       </div>
     )
   }
 }
 
 export default withRouter(App);
-
-  // http://api.openweathermap.org/data/2.5/weather?q=houston&appid=01e37278f53966b3856ffe031fc95713
 
 
 
