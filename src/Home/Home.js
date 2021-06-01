@@ -1,10 +1,9 @@
 
 import React
-// , {useState}  
-from 'react';
+  // , {useState}  
+  from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-// import CameraIcon from '@material-ui/icons/PhotoCamera';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -16,7 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
-// import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
+import useGeoLocation from "../useGeoLocation"; 
 
 function Copyright() {
   return (
@@ -30,7 +29,6 @@ function Copyright() {
     </Typography>
   );
 }
-
 const useStyles = makeStyles((theme) => ({
   icon: {
     marginRight: theme.spacing(2),
@@ -64,22 +62,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Home(props) {
-
-  // console.log(props.allResturaunts.split(" "))
-  const cards = [props.allResturaunts]; //comeback 2
   const classes = useStyles();
+  const location = useGeoLocation();
 
   return (
     <React.Fragment>
+      <div>{location.loaded ? `Latitude: ${location.coordinates.lat}, Longitude: ${location.coordinates.lng}`: "Location data not available yet."}</div>
       <CssBaseline />
       <AppBar position="relative">
         <Toolbar>
-          {/* <CameraIcon className={classes.icon} /> */}
-          <Button variant="contained" color="primary" onClick={()=>props.handleLogout()}>
+          <Button variant="contained" color="primary" onClick={() => props.handleLogout()}>
             Log Out
           </Button>
         </Toolbar>
       </AppBar>
+
       <main>
         {/* Hero unit */}
         <div className={classes.heroContent}>
@@ -93,7 +90,7 @@ export default function Home(props) {
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">
                 <Grid item>
-                  <Button variant="contained" color="primary" onClick={()=>props.populate()}>
+                  <Button variant="contained" color="primary" onClick={() => props.populate()}>
                     Personalize food near me
                   </Button>
                 </Grid>
@@ -109,21 +106,24 @@ export default function Home(props) {
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={5}>
-            {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
-                {/* -------------------card-------------------------------------- */}
+            {props.allResturaunts.length === 0 ? <h1>Unpopulated List</h1> : props.allResturaunts.map((card) => (
+
+              <Grid item key={card.id} xs={12} sm={6} md={4} >
+                {/*----------------------------------------card----------------------------------------*/}
                 <Card className={classes.card}>
+                  {console.log(props.allResturaunts.length, "Count")}
                   <CardMedia
                     className={classes.cardMedia}
-                    image="https://source.unsplash.com/1000x1000/?food"
+                    image={card.image_url}
                   />
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
                       {card.mom}
                     </Typography>
                     <Typography>
-                      Resturaunt Description
+                      {card.name}
                     </Typography>
+
                   </CardContent>
                   <CardActions>
                     <Button size="small" color="primary">
@@ -134,20 +134,20 @@ export default function Home(props) {
                     </Button>
                   </CardActions>
                 </Card>
-                {/* -------------------------card end-------------------------------- */}
-
+                {/*---------------------------------------card end---------------------------------------*/}
               </Grid>
             ))}
           </Grid>
         </Container>
       </main>
+
       {/* Footer */}
       <footer className={classes.footer}>
         <Typography variant="h6" align="center" gutterBottom>
-          Footer
+          EATS
         </Typography>
         <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-          Footer Description
+          Flatiron School Capstone Project 2021
         </Typography>
         <Copyright />
       </footer>

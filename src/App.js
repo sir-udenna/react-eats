@@ -5,12 +5,17 @@ import Home from './Home/Home'
 import { Switch, Route } from 'react-router-dom';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 import { withRouter } from "react-router-dom";
+
 // Redirect, Link, Router,
 
 class App extends React.Component {
+
+  
+
   state = {
     loggedIn: false,
-    resturaunts: []
+    resturaunts: [],
+    location: []
   }
 
   handleLogin = (e) => {
@@ -69,7 +74,7 @@ class App extends React.Component {
         {localStorage.token ? (
           <Switch>
             <Route exact path="/home">
-              <Home allResturaunts={this.state.resturaunts} handleLogout={this.handleLogout} populate={this.getResturaunts} />
+              <Home allResturaunts={this.state.resturaunts} handleLogout={this.handleLogout} populate={this.getResturaunts} location={this.state.location} />
             </Route>
           </Switch>
         ) : (
