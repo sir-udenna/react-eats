@@ -6,19 +6,34 @@ import { Switch, Route } from 'react-router-dom';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 import { withRouter } from "react-router-dom";
 
+
 // Redirect, Link, Router,
+// let userLocation
+
+// const success = (data) =>{
+// 	console.log(data, 'success message')
+// 	userLocation = [data.coords.latitude,data.coords.longitude]
+// }
+
+// const fail = (data) =>{
+// 	console.log(data, 'fail message')
+// }
+
+// window.navigator.geolocation.getCurrentPosition(success,fail)
 
 class App extends React.Component {
 
-  
-
-  state = {
-    loggedIn: false,
-    resturaunts: [],
-    location: []
+constructor(props){
+  super(props)
+    this.state = {
+      loggedIn: false,
+      resturaunts: [],
+      location: {longitude: -95, latitude: 30}
   }
+}
 
   handleLogin = (e) => {
+
     e.preventDefault()
     let user = {
       name: e.target[0].value,
@@ -49,7 +64,26 @@ class App extends React.Component {
   }
 
   getResturaunts = () => {
-    fetch('http://localhost:3000/api/v1/yelp_restaurants/', {
+    let userLocation
+
+      const success = (data) => {
+      console.log(data, 'success message')
+      this.userLocation = [data.coords.latitude, data.coords.longitude]
+    }
+
+    const fail = (data) => {
+      console.log(data, 'fail message')
+    }
+
+    window.navigator.geolocation.getCurrentPosition(success, fail)
+
+    if(userLocation){
+      console.log('found location')
+      console.log(userLocation)
+    }
+
+    fetch(`http://localhost:3000/api/v1/yelp_restaurants/?lat=${this.state.location.latitude}&long=${this.state.location.longitude}`, {
+
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -59,7 +93,7 @@ class App extends React.Component {
     })
       .then(res => res.json())
       .then(data => this.setState({ resturaunts: data.result.businesses }))
-      console.log(this.state.resturaunts)
+    console.log(this.state.resturaunts, 'rest')
 
     if (this.state.loggedIn === false) {
       this.setState({ loggedIn: true })
@@ -68,13 +102,18 @@ class App extends React.Component {
     }
   }
 
+  componentDidMount(){
+    this.getResturaunts()
+  }
+
   render() {
+    console.log(this.state.location.longitude,this.state.location.latitude, "state")
     return (
       <div className="App">
         {localStorage.token ? (
           <Switch>
             <Route exact path="/home">
-              <Home allResturaunts={this.state.resturaunts} handleLogout={this.handleLogout} populate={this.getResturaunts} location={this.state.location} />
+              <Home allResturaunts={this.state.resturaunts} handleLogout={this.handleLogout} />
             </Route>
           </Switch>
         ) : (

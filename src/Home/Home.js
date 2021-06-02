@@ -15,7 +15,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
-import useGeoLocation from "../useGeoLocation"; 
 
 function Copyright() {
   return (
@@ -63,11 +62,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home(props) {
   const classes = useStyles();
-  const location = useGeoLocation();
-
   return (
     <React.Fragment>
-      <div>{location.loaded ? `Latitude: ${location.coordinates.lat}, Longitude: ${location.coordinates.lng}`: "Location data not available yet."}</div>
       <CssBaseline />
       <AppBar position="relative">
         <Toolbar>
@@ -90,7 +86,7 @@ export default function Home(props) {
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">
                 <Grid item>
-                  <Button variant="contained" color="primary" onClick={() => props.populate()}>
+                  <Button variant="contained" color="primary" >
                     Personalize food near me
                   </Button>
                 </Grid>
@@ -106,12 +102,12 @@ export default function Home(props) {
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={5}>
-            {props.allResturaunts.length === 0 ? <h1>Unpopulated List</h1> : props.allResturaunts.map((card) => (
+            {props.allResturaunts.map((card) => (
 
               <Grid item key={card.id} xs={12} sm={6} md={4} >
                 {/*----------------------------------------card----------------------------------------*/}
                 <Card className={classes.card}>
-                  {console.log(props.allResturaunts.length, "Count")}
+                  {/* {console.log(props.allResturaunts.length, "Count")} */}
                   <CardMedia
                     className={classes.cardMedia}
                     image={card.image_url}
