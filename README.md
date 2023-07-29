@@ -1,9 +1,11 @@
-## About
-Front-End for react-eats written in React.js
+# About
 
-This application was created for my phase 5 project for Flatiron School in Houston, Texas. The purpose of this project is to solve the problem of finding food when you're hungry in a timely manner. I know when you're hungry you don't want to search for endless results on the web looking for the right place to eat. Wouldnt it be much easier if you can see the food first and find the location at the click of a button? With "EATS." that's exactly what you can do with this easy-to-read UI, created using Material UI, you can easily choose a place to eat without the hassle of searching through hundreds of results.
+**Front-End for react-eats written in React.js**
 
-** This app is currently still in development **
+This application was developed as the phase 5 project for Flatiron School in Houston, Texas. The primary goal of this project is to address the common issue of finding food quickly when you're hungry. We understand that when hunger strikes, you don't want to waste time searching through endless results on the web to find the right place to eat. With "EATS.", we aim to make the process much easier by providing a user-friendly interface that allows you to view food options and find their locations with just a click of a button. The UI is designed using Material UI, ensuring a seamless and delightful user experience.
+
+**Please note that this app is currently still in development.**
+
 ## Changelog
 
 
@@ -17,65 +19,58 @@ In the project directory, you can run:
 
 ### `yarn start`
 
-Runs the app in the development mode.\
+Launches the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+The page will reload automatically if you make any edits.\
+Additionally, the console will display any lint errors.
 
 ### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Launches the test runner in interactive watch mode.\
+For more information about running tests, see the [running tests](https://facebook.github.io/create-react-app/docs/running-tests) section in the Create React App documentation.
 
 ### `yarn build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Builds the app for production and creates a `build` folder.\
+The React app is bundled and optimized for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The build process includes minification, and the filenames include unique hashes.\
+Once the build is completed, your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+For more information about deployment, see the [deployment](https://facebook.github.io/create-react-app/docs/deployment) section in the Create React App documentation.
 
 ### `yarn eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The `eject` command should be used with caution as it is irreversible. It removes the single build dependency from your project and copies all the configuration files and transitive dependencies (webpack, Babel, ESLint, etc.) into your project directory, providing you with full control over them. Although the other commands will still work after ejecting, they will refer to the copied scripts, allowing you to customize them. We recommend using `eject` only when you are confident in your customizations.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+The Create React App offers a curated feature set suitable for small and medium deployments, making it unnecessary to use `eject` unless you require extensive customization. Nevertheless, we understand that having full control over the configuration is essential for some projects, and we provide this option for such cases.
 
 ## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+For more in-depth information and documentation, refer to the following resources:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started)
+- [React documentation](https://reactjs.org/)
 
 ### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Details about code splitting can be found in the [code splitting documentation](https://facebook.github.io/create-react-app/docs/code-splitting).
 
 ### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+To analyze the bundle size, refer to the [documentation on bundle size analysis](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size).
 
 ### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+For information on creating a Progressive Web App (PWA), consult the [PWA documentation](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app).
 
 ### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+For advanced configuration options, see the [advanced configuration documentation](https://facebook.github.io/create-react-app/docs/advanced-configuration).
 
-### Deployment
+### Troubleshooting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-
+If you encounter issues while running `yarn build`, refer to the [troubleshooting guide](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify) to resolve common problems.

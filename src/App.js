@@ -1,112 +1,102 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
-import LogIn from './Login/Login'
-import Home from './Home/Home'
-import { Switch, Route } from 'react-router-dom';
-import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
-import { withRouter } from "react-router-dom";
-import Info from './Info/Info'
+import { Switch, Route, withRouter, Redirect } from 'react-router-dom';
+import LogIn from './Componenets/Login/Login';
+import Home from './Componenets/Home/Home';
+import Info from './Componenets/Info/Info';
+import ErrorScreen from './Componenets/ErrorScreen/ErrorScreen';
+import { loginUser, getRestaurants } from './api'; // Updated import
 
-class App extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      loggedIn: false,
-      resturaunts: [],
-      location: { longitude: 0, latitude: 0 },
-      term: '',
-      info: {}
-    }
-  }
+class App extends Component {
+  state = {
+    loggedIn: false,
+    resturaunts: [], // Move the restaurants to the loggedIn user state
+    location: { longitude: 0, latitude: 0 },
+    term: '',
+    info: {},
+    error: false, // New state to handle errors
+  };
 
   handleLogin = (e) => {
-
-    e.preventDefault()
-    let user = {
+    e.preventDefault();
+    const user = {
       name: e.target[0].value,
-      password: e.target[2].value
-    }
+      password: e.target[2].value,
+    };
 
-    let reqPackage = {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      },
-      body: JSON.stringify(user)
-    }
-
-    fetch('http://localhost:3000/api/v1/login', reqPackage)
-      .then(res => res.json())
-      .then(data => {
-        localStorage.setItem("token", data.token)
-        this.getResturaunts()
-        this.setState({ loggedIn: true })
-        this.props.history.push("/home")
-      })
-  }
+    loginUser(user)
+      .then((data) => {
+        localStorage.setItem('token', data.token);
+        this.setState({ loggedIn: true }); // Set the loggedIn state to true
+        this.props.history.push('/home');
+      });
+  };
 
   handleLogout = () => {
-    console.log('clear localstorage')
-    localStorage.clear()
-    window.location.href = '/login';
-  }
+    localStorage.removeItem('token');
+    this.setState({ loggedIn: false, resturaunts: [] }); // Reset loggedIn and remove the restaurants
+    this.props.history.push('/login');
+  };
 
   getResturaunts = () => {
+    if (!this.state.loggedIn) return; // Only fetch when user is logged in
 
     const success = (data) => {
-      this.setState({ location: { longitude: data.coords.longitude, latitude: data.coords.latitude } })
-      console.log(data, 'success')
+      const { latitude, longitude } = data.coords;
+      this.setState({ location: { latitude, longitude } });
 
-      fetch(`http://localhost:3000/api/v1/yelp_restaurants/?lat=${data.coords.latitude}&long=${data.coords.longitude}&term=${this.state.term} food`, {
-
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer TfAfZ9CEBvQhMOvO5CcgbnmVNh4raReuVs6pQ5T9feqpz8_QmXw-R1kWfxJTvMoE5d7mGrencCzHmRCR2alxB2whr8GMm0byjI22x0kia_u2TgHwPLdrwO31RBSwYHYx'
-        }
-      })
-        .then(res => res.json())
-        .then(data => this.setState({ resturaunts: data.result.businesses }))
-
-    }
+      getRestaurants(latitude, longitude, this.state.term)
+        .then((data) => this.setState({ resturaunts: data.result.businesses }))
+        .catch((error) => {
+          console.log(error);
+          this.setState({ error: true });
+        });
+    };
 
     const fail = (data) => {
-      console.log(data, 'fail')
-    }
+      console.log(data, 'fail');
+      this.setState({ error: true });
+    };
 
-    window.navigator.geolocation.getCurrentPosition(success, fail)
-
-    if (this.state.loggedIn === false) {
-      this.setState({ loggedIn: true })
-    } else {
-      console.log('already logged in')
-    }
-  }
+    window.navigator.geolocation.getCurrentPosition(success, fail);
+  };
 
   componentDidMount() {
-    this.getResturaunts()
+    this.getResturaunts(); // Fetch restaurants when the component mounts
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.term !== this.state.term || prevState.loggedIn !== this.state.loggedIn) {
+      this.getResturaunts(); // Fetch restaurants when the term or loggedIn state changes
+    }
   }
 
   handleSearch = (e) => {
-    this.setState({ term: e.target.value })
-    this.getResturaunts()
-  }
+    this.setState({ term: e.target.value });
+  };
 
   handleMoreinfo = (card) => {
-    console.log(card.id)
-      localStorage.setItem("infoData", card.id);
-      window.location.href = '/info';
-  }
+    localStorage.setItem('infoData', card.id);
+    this.props.history.push('/info');
+  };
 
   render() {
+    if (this.state.error) {
+      return <ErrorScreen />;
+    }
+
     return (
       <div className="App">
         {localStorage.token ? (
           <Switch>
             <Route exact path="/home">
-              <Home handleMoreinfo={this.handleMoreinfo} allResturaunts={this.state.resturaunts} handleLogout={this.handleLogout} term={this.state.term} handleSearch={this.handleSearch} />
+              <Home
+                handleMoreinfo={this.handleMoreinfo}
+                allResturaunts={this.state.resturaunts}
+                handleLogout={this.handleLogout}
+                term={this.state.term}
+                handleSearch={this.handleSearch}
+              />
             </Route>
             <Route exact path="/info">
               <Info info={this.state.info} />
@@ -120,16 +110,12 @@ class App extends React.Component {
             <Route exact path="/login">
               <LogIn handleLogin={this.handleLogin} />
             </Route>
+            <Redirect to="/login" />
           </Switch>
-
         )}
       </div>
-    )
+    );
   }
 }
 
 export default withRouter(App);
-
-
-
-

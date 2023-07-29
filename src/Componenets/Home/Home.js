@@ -10,7 +10,7 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import InputBase from '@material-ui/core/InputBase';
-import NavBar from '../AppBar/PrimarySearchAppBar'
+import NavBar from '../../Componenets/AppBar/PrimarySearchAppBar'
 
 function Copyright() {
   return (
