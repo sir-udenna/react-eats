@@ -7,6 +7,12 @@ import Info from './Componenets/Info/Info';
 import ErrorScreen from './Componenets/ErrorScreen/ErrorScreen';
 import { loginUser, getRestaurants } from './api'; // Updated import
 
+// Import Material-UI components and styles
+import { CssBaseline } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme();
+
 class App extends Component {
   state = {
     loggedIn: false,
@@ -39,7 +45,7 @@ class App extends Component {
   };
 
   getResturaunts = () => {
-    if (!this.state.loggedIn) return; // Only fetch when user is logged in
+    if (!this.state.loggedIn) return; // Only fetch when the user is logged in
 
     const success = (data) => {
       const { latitude, longitude } = data.coords;
@@ -86,34 +92,37 @@ class App extends Component {
     }
 
     return (
-      <div className="App">
-        {localStorage.token ? (
-          <Switch>
-            <Route exact path="/home">
-              <Home
-                handleMoreinfo={this.handleMoreinfo}
-                allResturaunts={this.state.resturaunts}
-                handleLogout={this.handleLogout}
-                term={this.state.term}
-                handleSearch={this.handleSearch}
-              />
-            </Route>
-            <Route exact path="/info">
-              <Info info={this.state.info} />
-            </Route>
-          </Switch>
-        ) : (
-          <Switch>
-            <Route exact path="/home">
-              <LogIn handleLogin={this.handleLogin} />
-            </Route>
-            <Route exact path="/login">
-              <LogIn handleLogin={this.handleLogin} />
-            </Route>
-            <Redirect to="/login" />
-          </Switch>
-        )}
-      </div>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <div className="App">
+          {localStorage.token ? (
+            <Switch>
+              <Route exact path="/home">
+                <Home
+                  handleMoreinfo={this.handleMoreinfo}
+                  allResturaunts={this.state.resturaunts}
+                  handleLogout={this.handleLogout}
+                  term={this.state.term}
+                  handleSearch={this.handleSearch}
+                />
+              </Route>
+              <Route exact path="/info">
+                <Info info={this.state.info} />
+              </Route>
+            </Switch>
+          ) : (
+            <Switch>
+              <Route exact path="/home">
+                <LogIn handleLogin={this.handleLogin} />
+              </Route>
+              <Route exact path="/login">
+                <LogIn handleLogin={this.handleLogin} />
+              </Route>
+              <Redirect to="/login" />
+            </Switch>
+          )}
+        </div>
+      </ThemeProvider>
     );
   }
 }
