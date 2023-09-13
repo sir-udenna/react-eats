@@ -6,6 +6,9 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import {API_BASE_URL, YELP_API_KEY} from '../../api'
+
+console.log(API_BASE_URL)
 
 export default class Info extends React.Component {
     state = {
@@ -15,13 +18,13 @@ export default class Info extends React.Component {
     }
 
     handleMoreinfo = (id) => {
-        fetch(`http://localhost:3000/api/v1/yelp_restaurants_info/?id=${id}`, {
+        fetch(`${API_BASE_URL}/yelp_restaurants_info/?id=${id}`, {
 
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'Authorization': 'Bearer TfAfZ9CEBvQhMOvO5CcgbnmVNh4raReuVs6pQ5T9feqpz8_QmXw-R1kWfxJTvMoE5d7mGrencCzHmRCR2alxB2whr8GMm0byjI22x0kia_u2TgHwPLdrwO31RBSwYHYx'
+                'Authorization': `${YELP_API_KEY}`
             }
         })
             .then(res => res.json())
