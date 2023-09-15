@@ -8,7 +8,7 @@ import ErrorScreen from './Componenets/ErrorScreen/ErrorScreen';
 import { loginUser, getRestaurants } from './api'; // Updated import
 
 // Import Material-UI components and styles
-import { CssBaseline } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline'; // Use CssBaseline from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme();
@@ -16,7 +16,7 @@ const theme = createTheme();
 class App extends Component {
   state = {
     loggedIn: false,
-    resturaunts: [], // Move the restaurants to the loggedIn user state
+    restaurants: [], // Updated variable name
     location: { longitude: 0, latitude: 0 },
     term: '',
     info: {},
@@ -40,11 +40,11 @@ class App extends Component {
 
   handleLogout = () => {
     localStorage.removeItem('token');
-    this.setState({ loggedIn: false, resturaunts: [] }); // Reset loggedIn and remove the restaurants
+    this.setState({ loggedIn: false, restaurants: [] }); // Reset loggedIn and remove the restaurants
     this.props.history.push('/login');
   };
 
-  getResturaunts = () => {
+  getRestaurants = () => {
     if (!this.state.loggedIn) return; // Only fetch when the user is logged in
 
     const success = (data) => {
@@ -52,7 +52,7 @@ class App extends Component {
       this.setState({ location: { latitude, longitude } });
 
       getRestaurants(latitude, longitude, this.state.term)
-        .then((data) => this.setState({ resturaunts: data.result.businesses }))
+        .then((data) => this.setState({ restaurants: data.result.businesses }))
         .catch((error) => {
           console.log(error);
           this.setState({ error: true });
@@ -68,12 +68,12 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this.getResturaunts(); // Fetch restaurants when the component mounts
+    this.getRestaurants(); // Fetch restaurants when the component mounts
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.term !== this.state.term || prevState.loggedIn !== this.state.loggedIn) {
-      this.getResturaunts(); // Fetch restaurants when the term or loggedIn state changes
+      this.getRestaurants(); // Fetch restaurants when the term or loggedIn state changes
     }
   }
 
@@ -81,7 +81,7 @@ class App extends Component {
     this.setState({ term: e.target.value });
   };
 
-  handleMoreinfo = (card) => {
+  handleMoreInfo = (card) => {
     localStorage.setItem('infoData', card.id);
     this.props.history.push('/info');
   };
@@ -94,16 +94,17 @@ class App extends Component {
     return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div className="App">
+        <div className="App" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {localStorage.token ? (
             <Switch>
               <Route exact path="/home">
                 <Home
-                  handleMoreinfo={this.handleMoreinfo}
-                  allResturaunts={this.state.resturaunts}
+                  handleMoreInfo={this.handleMoreInfo}
+                  allRestaurants={this.state.restaurants} // Updated variable name
                   handleLogout={this.handleLogout}
                   term={this.state.term}
                   handleSearch={this.handleSearch}
+                  sx={{ width: '100%' }} // Added inline styling using sx
                 />
               </Route>
               <Route exact path="/info">

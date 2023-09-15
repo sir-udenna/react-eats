@@ -1,17 +1,15 @@
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-// import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@mui/material/Avatar'; // Updated import
+import Button from '@mui/material/Button'; // Updated import
+import CssBaseline from '@mui/material/CssBaseline'; // Updated import
+import TextField from '@mui/material/TextField'; // Updated import
+import FormControlLabel from '@mui/material/FormControlLabel'; // Updated import
+import Checkbox from '@mui/material/Checkbox'; // Updated import
+import Link from '@mui/material/Link'; // Updated import
+import Paper from '@mui/material/Paper'; // Updated import
+import Box from '@mui/material/Box'; // Updated import
+import Grid from '@mui/material/Grid'; // Updated import
+import Typography from '@mui/material/Typography'; // Updated import
 
 function Copyright() {
   return (
@@ -26,53 +24,25 @@ function Copyright() {
   );
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: '100vh',
-  },
-  image: {
-    backgroundImage: 'url(https://source.unsplash.com/1000x1000/?food)',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
-  paper: {
-    margin: theme.spacing(8, 4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
 export default function SignIn(props) {
-  const classes = useStyles();
-
   return (
-    <Grid container component="main" className={classes.root}>
+    <Grid container component="main" sx={{ height: '100vh' }}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      <Grid item xs={false} sm={4} md={7} sx={{ backgroundImage: 'url(https://source.unsplash.com/1000x1000/?food)',
+        backgroundRepeat: 'no-repeat',
+        backgroundColor: (theme) => theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            {/* <LockOutlinedIcon /> */}
-          </Avatar>
+        <div sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',
+          margin: (theme) => theme.spacing(8, 4),
+        }}>
+          <Avatar sx={{ margin: (theme) => theme.spacing(1), backgroundColor: (theme) => theme.palette.secondary.main }}></Avatar>
           <Typography component="h1" variant="h5">
-            Sign in 
+            Sign in
           </Typography>
-          <form className={classes.form} onSubmit={props.handleLogin}>
+          <form onSubmit={props.handleLogin} sx={{ width: '100%', marginTop: (theme) => theme.spacing(1) }}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -104,7 +74,7 @@ export default function SignIn(props) {
               fullWidth
               variant="contained"
               color="primary"
-              className={classes.submit}
+              sx={{ margin: (theme) => theme.spacing(3, 0, 2) }}
             >
               Sign In
             </Button>
@@ -129,4 +99,3 @@ export default function SignIn(props) {
     </Grid>
   );
 }
-
