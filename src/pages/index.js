@@ -1,119 +1,72 @@
-// import React, { Component } from 'react';
-// import { useRouter } from 'next/router'; // Import useRouter
-// import Link from 'next/link'; // Import Link
-// import Home from '../Componen
-// import Info from '../Components/Info/Info';
-// import ErrorScreen from '../components/ErrorScreen/ErrorScreen';
-// import { loginUser, getRestaurants } from '../api';
-// import CssBaseline from '@mui/material/CssBaseline';
-// import { createTheme, ThemeProvider } from '@mui/material/styles';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import CssBaseline from '@mui/material/CssBaseline';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
 
-// const theme = createTheme();
+const theme = createTheme();
 
-// class HomePage extends Component {
-//   state = {
-//     loggedIn: false,
-//     restaurants: [],
-//     location: { longitude: 0, latitude: 0 },
-//     term: '',
-//     info: {},
-//     error: false,
-//   };
+const SplashContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: '100vh',
+  background: 'url(https://source.unsplash.com/1000x1000/?food) no-repeat center center fixed',
+  backgroundSize: 'cover',
+});
 
-//   handleLogin = (e) => {
-//     e.preventDefault();
-//     const user = {
-//       name: e.target[0].value,
-//       password: e.target[2].value,
-//     };
+const SplashContent = styled('div')({
+  backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent white background
+  padding: '2rem',
+  borderRadius: '8px',
+  textAlign: 'center',
+});
 
-//     loginUser(user)
-//       .then((data) => {
-//         localStorage.setItem('token', data.token);
-//         this.setState({ loggedIn: true });
-//         // Use Next.js' router to navigate to '/home'
-//         useRouter().push('/home');
-//       });
-//   };
+export default function Homepage() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [error, setError] = useState(false);
+  const router = useRouter();
 
-//   handleLogout = () => {
-//     localStorage.removeItem('token');
-//     this.setState({ loggedIn: false, restaurants: [] });
-//     // Use Next.js' router to navigate to '/login'
-//     useRouter().push('/login');
-//   };
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      setLoggedIn(true);
+    }
+  }, []); 
 
-//   getRestaurants = () => {
-//     if (!this.state.loggedIn) return;
+  useEffect(() => {
+    if (loggedIn) {
+      router.push('/home');
+    }
+  }, [loggedIn]);
 
-//     const success = (data) => {
-//       const { latitude, longitude } = data.coords;
-//       this.setState({ location: { latitude, longitude } });
+  const handleLogin = () => {
+    router.push('/login');
+  };
 
-//       getRestaurants(latitude, longitude, this.state.term)
-//         .then((data) => this.setState({ restaurants: data.result.businesses }))
-//         .catch((error) => {
-//           console.log(error);
-//           this.setState({ error: true });
-//         });
-//     };
+  if (error) {
+    return <ErrorScreen />;
+  }
 
-//     const fail = (data) => {
-//       console.log(data, 'fail');
-//       this.setState({ error: true });
-//     };
-
-//     window.navigator.geolocation.getCurrentPosition(success, fail);
-//   };
-
-//   componentDidMount() {
-//     this.getRestaurants();
-//   }
-
-//   componentDidUpdate(prevProps, prevState) {
-//     if (prevState.term !== this.state.term || prevState.loggedIn !== this.state.loggedIn) {
-//       this.getRestaurants();
-//     }
-//   }
-
-//   handleSearch = (e) => {
-//     this.setState({ term: e.target.value });
-//   };
-
-//   handleMoreInfo = (card) => {
-//     localStorage.setItem('infoData', card.id);
-//     // Use Next.js' router to navigate to '/info'
-//     useRouter().push('/info');
-//   };
-
-//   render() {
-//     if (this.state.error) {
-//       return <ErrorScreen />;
-//     }
-
-//     return (
-//       <ThemeProvider theme={theme}>
-//         <CssBaseline />
-//         <div className="App" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-//           {localStorage.token ? (
-//             <div>
-//               <Link href="/home">Home</Link> | <Link href="/info">Info</Link> | <button onClick={this.handleLogout}>Logout</button>
-//               <Home
-//                 handleMoreInfo={this.handleMoreInfo}
-//                 allRestaurants={this.state.restaurants}
-//                 handleSearch={this.handleSearch}
-//               />
-//               <Info info={this.state.info} />
-//             </div>
-//           ) : (
-//             <div>
-//               <Link href="/login">Login</Link>
-//             </div>
-//           )}
-//         </div>
-//       </ThemeProvider>
-//     );
-//   }
-// }
-
-// export default HomePage;
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <SplashContainer>
+        <SplashContent>
+          <Typography variant="h4" gutterBottom>
+            Welcome to EATS
+          </Typography>
+          <Typography variant="h6" paragraph>
+            Discover the best local restaurants near you!
+          </Typography>
+          <Button variant="contained" color="primary" onClick={handleLogin}>
+            Login
+          </Button>
+        </SplashContent>
+      </SplashContainer>
+    </ThemeProvider>
+  );
+}

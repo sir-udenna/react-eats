@@ -1,108 +1,139 @@
-import React from 'react';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import ImageList from '@mui/material/ImageList'; // Updated import
-import ImageListItem from '@mui/material/ImageListItem'; // Updated import
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
-import InputBase from '@mui/material/InputBase';
-import NavBar from '../../Componenets/AppBar/PrimarySearchAppBar';
-import Grid from '@mui/material/Grid';
+import React, { useState, useEffect } from 'react';
+import Navbar from '../../components/navigation/navbar';
+import { useAuth } from '../../contexts/authContext';
+import { getRestaurants } from '../../api';
+import {
+  Typography,
+  TextField,
+  Container,
+  Grid,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Button,
+  styled,
+} from '@mui/material';
 
-function Copyright() {
+const HomeContainer = styled(Container)(({ theme }) => ({
+  marginTop: theme.spacing(4),
+}));
+
+const SearchBar = styled(TextField)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+}));
+
+const RestaurantCard = styled(Card)(({ theme }) => ({
+  maxWidth: 345,
+}));
+
+const CardMediaImage = styled(CardMedia)(({ theme }) => ({
+  height: 200,
+}));
+
+const CardContentCentered = styled(CardContent)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+}));
+
+function Home(props) {
+  const { user } = useAuth();
+  const [restaurants, setRestaurants] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    const getLocation = () => {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const { latitude, longitude } = position.coords;
+          fetchData(latitude, longitude);
+        }, (error) => {
+          console.error('Error getting user location:', error);
+          fetchData(37.7749, -122.4194, searchTerm);
+        });
+      } else {
+        console.error('Geolocation not available');
+        fetchData(37.7749, -122.4194, searchTerm);
+      }
+    };
+
+    const fetchData = async (latitude, longitude) => {
+      try {
+        const data = await getRestaurants(latitude, longitude, searchTerm, null, true, 'best_match');
+        setRestaurants(data.businesses);
+      } catch (error) {
+        console.error('Error fetching restaurant data:', error);
+      }
+    };
+
+    getLocation();
+  }, [searchTerm]);
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="/home">
-        EATS.
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
+    <>
+      <Navbar logout={props.handleLogout} />
+      <HomeContainer>
+        <Typography variant="h2" gutterBottom>
+          Welcome to EATS.
+        </Typography>
+        <Typography variant="h5" gutterBottom>
+          Here are some food options near you. Search below to personalize your results.
+        </Typography>
+        <SearchBar
+          fullWidth
+          variant="outlined"
+          placeholder="Search…"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+        <Grid container spacing={2}>
+          {restaurants && restaurants.length > 0 ? (
+            restaurants.map((restaurant) => (
+              <Grid item key={restaurant.id} xs={12} sm={6} md={4}>
+                <RestaurantCard>
+                  <CardActionArea>
+                    <CardMediaImage
+                      component="img"
+                      alt={restaurant.name}
+                      image={restaurant.image_url || 'https://www.officespacesny.com/wp-content/themes/realestate-7/images/no-image.png'}
+                    />
+                    <CardContentCentered>
+                      <Typography variant="h5" component="div">
+                        {restaurant.name}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        {restaurant.categories.map((category) => category.title).join(', ')}
+                      </Typography>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => props.handleMoreInfo(restaurant)}
+                      >
+                        More Info
+                      </Button>
+                    </CardContentCentered>
+                  </CardActionArea>
+                </RestaurantCard>
+              </Grid>
+            ))
+          ) : (
+            <Typography variant="body1">No restaurants found</Typography>
+          )}
+        </Grid>
+      </HomeContainer>
+      <footer>
+        <div>
+          <Typography variant="h6">EATS</Typography>
+          <Typography variant="body2">Flatiron School Capstone Project 2021</Typography>
+        </div>
+      </footer>
+    </>
   );
 }
-
-const Home = (props) => {
-  return (
-    <React.Fragment>
-      <NavBar logout={props.handleLogout} />
-      <main>
-        {/* Hero unit */}
-        <div sx={{ padding: 4, backgroundColor: 'background.paper' }}>
-          <Container maxWidth="sm">
-            <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
-              Welcome to EATS.
-            </Typography>
-            <Typography variant="h5" align="center" color="textSecondary" paragraph>
-              Here are some food options near you. Search below to personalize your results.
-            </Typography>
-            <div sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-              <InputBase
-                placeholder="Search…"
-                sx={{
-                  backgroundColor: 'background.default',
-                  '&:hover': {
-                    backgroundColor: 'background.paper',
-                  },
-                }}
-                inputProps={{ 'aria-label': 'search' }}
-                onChange={props.handleSearch}
-              />
-            </div>
-          </Container>
-        </div>
-        <Container maxWidth="md">
-          {/* End hero unit */}
-          <ImageList rowHeight={200} gap={16} variant="masonry"> {/* Updated component and props */}
-            {props.allRestaurants.reverse().map((card) => (
-              <ImageListItem key={card.id} cols={1}>
-                <Card sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <CardMedia
-                    component="img"
-                    src={card.image_url === '' ? 'https://www.officespacesny.com/wp-content/themes/realestate-7/images/no-image.png' : card.image_url}
-                    alt={card.name}
-                  />
-                  <CardContent sx={{ flex: 1 }}>
-                    <Typography variant="h5" gutterBottom>
-                      {card.mom}
-                    </Typography>
-                    <Typography>
-                      {card.name}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small" color="primary" onClick={() => props.handleMoreInfo(card)}>
-                      More Info
-                    </Button>
-                    <Button size="small" color="primary">
-                      Favorite
-                    </Button>
-                  </CardActions>
-                </Card>
-              </ImageListItem>
-            ))}
-          </ImageList>
-        </Container>
-      </main>
-      {/* Footer */}
-      <footer sx={{ bgcolor: 'background.paper', py: 3 }}>
-        <Container maxWidth="sm">
-          <Typography variant="h6" align="center" gutterBottom>
-            EATS
-          </Typography>
-          <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-            Flatiron School Capstone Project 2021
-          </Typography>
-        </Container>
-        <Copyright />
-      </footer>
-      {/* End footer */}
-    </React.Fragment>
-  );
-};
 
 export default Home;

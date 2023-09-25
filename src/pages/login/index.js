@@ -1,4 +1,4 @@
-import {React, useEffect} from 'react';
+import { React, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,9 +10,8 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Add icon import
-
-
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { useAuth } from '../../contexts/authContext'
 
 function Copyright() {
   return (
@@ -27,11 +26,28 @@ function Copyright() {
   );
 }
 
-export default function SignIn(props) {
+export default function SignIn() {
+  const { login } = useAuth();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const user = {
+      "user": {
+        "email": e.target.email.value,
+        "password": e.target.password.value,
+      }
+    };
+
+    try {
+      await login(user);
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
+  };
 
   useEffect(() => {
     console.log('rendered');
-  },[]);
+  }, []);
 
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
@@ -56,7 +72,7 @@ export default function SignIn(props) {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: 4, // Add padding for better spacing
+            padding: 4,
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
@@ -66,10 +82,10 @@ export default function SignIn(props) {
             Sign in
           </Typography>
           <form
-            onSubmit={props.handleLogin}
+            onSubmit={handleLogin}
             sx={{
               width: '100%',
-              marginTop: 1, // Adjust spacing
+              marginTop: 1,
             }}
           >
             <TextField
@@ -104,7 +120,7 @@ export default function SignIn(props) {
               variant="contained"
               color="primary"
               sx={{
-                marginY: 2, // Adjust vertical margin
+                marginY: 2,
               }}
             >
               Sign In
