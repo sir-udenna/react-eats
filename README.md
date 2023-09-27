@@ -13,11 +13,11 @@ To get started with the EATS frontend, follow these steps:
 3. Run `npm install` to install the project's dependencies.
 4. Run `npm run dev` to start the development server.
 
-The app will be accessible at `http://localhost:3000` in your web browser.
+The app will be accessible at `http://localhost:3001` in your web browser.
 
 ## Backend Repository
 
-The backend for this application can be found in a separate repository: [rails-eats-2](https://github.com/sir-udenna/rails-eats-2). Be sure to set up and run the backend server as well to enable full functionality.
+The backend for this application can be found in a separate repository: [rails-eats-2](https://github.com/sir-udenna/rails-eats-2). Be sure to set up and run the backend server **BEFORE THIS ONE** as well to enable full functionality.
 
 ## Changelog
 
