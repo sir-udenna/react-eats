@@ -37,7 +37,7 @@ const CardContentCentered = styled(CardContent)(({ theme }) => ({
   alignItems: 'center',
 }));
 
-function Home(props) {
+export default function Home(props) {
   const { user } = useAuth();
   const [restaurants, setRestaurants] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -135,5 +135,3 @@ function Home(props) {
     </>
   );
 }
-
-export default Home;
