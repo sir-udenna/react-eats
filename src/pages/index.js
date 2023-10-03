@@ -5,6 +5,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import { Grid } from '@mui/material';
+import RestaurantIcon from '@mui/icons-material/Restaurant';
 
 const theme = createTheme();
 
@@ -25,48 +29,59 @@ const SplashContent = styled('div')({
   textAlign: 'center',
 });
 
+//Splash screen
 export default function Homepage() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [error, setError] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    if (token) {
-      setLoggedIn(true);
-    }
-  }, []); 
-
-  useEffect(() => {
-    if (loggedIn) {
-      router.push('/home');
-    }
-  }, [loggedIn]);
-
-  const handleLogin = () => {
-    router.push('/login');
+  const handleLearnMore = () => {
+    // Redirect to a detailed features page
+    router.push('/Login'); // Login for now
   };
-
-  if (error) {
-    return <ErrorScreen />;
-  }
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <SplashContainer>
-        <SplashContent>
-          <Typography variant="h4" gutterBottom>
+    
+      <Container>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '2rem',
+          }}
+        >
+          <Typography variant="h2" align="center" gutterBottom>
             Welcome to EATS
           </Typography>
-          <Typography variant="h6" paragraph>
-            Discover the best local restaurants near you!
+          <Typography variant="h5" align="center" paragraph>
+            Discover the best local restaurants near you with EATS!
           </Typography>
-          <Button variant="contained" color="primary" onClick={handleLogin}>
-            Login
-          </Button>
-        </SplashContent>
-      </SplashContainer>
+          <Grid container spacing={2} justifyContent="center">
+            <Grid item>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<RestaurantIcon />}
+                onClick={handleLearnMore}
+              >
+                Learn More
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => router.push('/login')}
+              >
+                Login
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
     </ThemeProvider>
   );
 }
