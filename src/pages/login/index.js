@@ -1,4 +1,4 @@
-import { React, useEffect } from 'react';
+import { React, useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,22 +12,18 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useAuth } from '../../contexts/authContext'
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        EATS.
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { Copyright } from '../../components/copyright';
 
 export default function SignIn() {
-  const { login } = useAuth();
+  const { login, user } = useAuth();
+  const [loggedin, setLoggedin] = useState(false)
+  console.log(user)
+
+  const redirect = () => {
+    if (localStorage.getItem('token')) {
+      setLoggedin(true)
+    }
+  }
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -40,6 +36,7 @@ export default function SignIn() {
 
     try {
       await login(user);
+      console.log(user, "hl")
     } catch (error) {
       console.error('Login failed:', error);
     }
@@ -47,6 +44,7 @@ export default function SignIn() {
 
   useEffect(() => {
     console.log('rendered');
+    redirect()
   }, []);
 
   return (

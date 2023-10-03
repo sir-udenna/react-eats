@@ -1,6 +1,5 @@
 // AuthContext.js
 import React, { createContext, useContext, useState } from 'react';
-import { API_BASE_URL } from '../api';
 
 const AuthContext = createContext();
 
@@ -10,7 +9,6 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  console.log(user)
 
   const login = (userData) => {
     fetch("http://localhost:3000/users/sign_in", {
@@ -23,8 +21,7 @@ export function AuthProvider({ children }) {
     })
       .then((response) => response.json())
       .then((data) => {
-
-        sessionStorage.setItem('token', data.token);
+        localStorage.setItem('token', data.authentication_token);
         setUser(data.user);
         console.log(data)
       })
@@ -35,14 +32,14 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
-    fetch(`${API_BASE_URL}/users/sign_out`, {
+    fetch("http://localhost:3000/users/sign_out", {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',        
       },
     })
       .then(() => {
-        sessionStorage.removeItem('token');
         setUser(null);
         router.push('/login');
       })

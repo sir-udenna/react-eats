@@ -43,32 +43,32 @@ export default function Home(props) {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    const getLocation = () => {
-      if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const { latitude, longitude } = position.coords;
-          fetchData(latitude, longitude);
-        }, (error) => {
-          console.error('Error getting user location:', error);
-          fetchData(37.7749, -122.4194, searchTerm);
-        });
-      } else {
-        console.error('Geolocation not available');
-        fetchData(37.7749, -122.4194, searchTerm);
-      }
-    };
-
-    const fetchData = async (latitude, longitude) => {
-      try {
-        const data = await getRestaurants(latitude, longitude, searchTerm, null, true, 'best_match');
-        setRestaurants(data.businesses);
-      } catch (error) {
-        console.error('Error fetching restaurant data:', error);
-      }
-    };
-
     getLocation();
   }, [searchTerm]);
+
+  const getLocation = () => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        fetchData(latitude, longitude);
+      }, (error) => {
+        console.error('Error getting user location:', error);
+        fetchData(37.7749, -122.4194, searchTerm);
+      });
+    } else {
+      console.error('Geolocation not available');
+      fetchData(37.7749, -122.4194, searchTerm);
+    }
+  };
+
+  const fetchData = async (latitude, longitude) => {
+    try {
+      const data = await getRestaurants(latitude, longitude, searchTerm, null, true, 'best_match');
+      setRestaurants(data.businesses);
+    } catch (error) {
+      console.error('Error fetching restaurant data:', error);
+    }
+  };
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -122,7 +122,7 @@ export default function Home(props) {
               </Grid>
             ))
           ) : (
-            <Typography variant="body1">No restaurants found</Typography>
+            <Typography variant="body1" align='center'>No restaurants found</Typography>
           )}
         </Grid>
       </HomeContainer>
