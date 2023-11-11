@@ -1,5 +1,8 @@
+"use client"
 // AuthContext.js
 import React, { createContext, useContext, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { loginSuccess, loginFailure, logoutSuccess } from '../redux/actions/authActions';
 
 const AuthContext = createContext();
 
@@ -8,9 +11,9 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
 
-  const login = (userData) => {
+  const loginAuth = (userData) => {
     fetch("http://localhost:3000/users/sign_in", {
       method: 'POST',
       headers: {
@@ -21,13 +24,12 @@ export function AuthProvider({ children }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        localStorage.setItem('token', data.authentication_token);
-        setUser(data.user);
-        console.log(data)
+        console.log(data, "data auth context") // debugging
+        dispatch(loginSuccess(data.username, data.authentication_token))
       })
       .catch((error) => {
-        // Handle login error
-        console.log(error)
+        console.log(error, "in login")
+        dispatch(loginFailure()) 
       });
   };
 
@@ -36,11 +38,11 @@ export function AuthProvider({ children }) {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',        
+        'Accept': 'application/json',
       },
     })
       .then(() => {
-        setUser(null);
+        dispatch(logoutSuccess());
         router.push('/login');
       })
       .catch((error) => {
@@ -49,13 +51,12 @@ export function AuthProvider({ children }) {
   };
 
   const value = {
-    user,
-    login,
+    loginAuth,
     logout,
   };
 
   return (
-    <AuthContext.Provider value={{ login, logout, user }}>
+    <AuthContext.Provider value={{ loginAuth, logout }}>
       {children}
     </AuthContext.Provider>
   );

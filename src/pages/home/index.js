@@ -14,6 +14,7 @@ import {
   Button,
   styled,
 } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 
 const HomeContainer = styled(Container)(({ theme }) => ({
   marginTop: theme.spacing(4),
@@ -41,6 +42,8 @@ export default function Home(props) {
   const { user } = useAuth();
   const [restaurants, setRestaurants] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  console.log(isAuthenticated)
 
   useEffect(() => {
     getLocation();
