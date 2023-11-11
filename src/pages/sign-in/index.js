@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,9 +17,9 @@ import { useAuth } from '../../contexts/authContext'
 import { Copyright } from '../../components/copyright';
 
 export default function SignIn() {
-  const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.reducer.auth.isAuthenticated);
-  console.log(isAuthenticated)
+  const { loginAuth } = useAuth();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -30,16 +31,12 @@ export default function SignIn() {
     };
 
     try {
-      await login(user);
-      console.log(user, "hl")
+      await loginAuth(user)
+      router.push('/home')
     } catch (error) {
       console.error('Login failed:', error);
     }
   };
-
-  useEffect(() => {
-    console.log('rendered');
-  }, []);
 
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>

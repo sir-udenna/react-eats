@@ -35,7 +35,7 @@ export default function Homepage() {
 
   const handleLearnMore = () => {
     // Redirect to a detailed features page
-    router.push('/Login'); // Login for now
+    router.push('/sign-in'); // Login for now
   };
 
   return (
@@ -73,7 +73,7 @@ export default function Homepage() {
               <Button
                 variant="outlined"
                 color="primary"
-                onClick={() => router.push('/login')}
+                onClick={() => router.push('/sign-in')}
               >
                 Login
               </Button>
