@@ -41,7 +41,6 @@ export default function Homepage() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-    
       <Container>
         <Box
           sx={{

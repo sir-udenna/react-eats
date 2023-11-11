@@ -1,4 +1,5 @@
 import { React, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,15 +16,9 @@ import { useAuth } from '../../contexts/authContext'
 import { Copyright } from '../../components/copyright';
 
 export default function SignIn() {
-  const { login, user } = useAuth();
-  const [loggedin, setLoggedin] = useState(false)
-  console.log(user)
-
-  const redirect = () => {
-    if (localStorage.getItem('token')) {
-      setLoggedin(true)
-    }
-  }
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.reducer.auth.isAuthenticated);
+  console.log(isAuthenticated)
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -44,7 +39,6 @@ export default function SignIn() {
 
   useEffect(() => {
     console.log('rendered');
-    redirect()
   }, []);
 
   return (
