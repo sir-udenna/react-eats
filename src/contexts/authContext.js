@@ -1,8 +1,8 @@
-"use client"
-// AuthContext.js
+// "use client"
 import React, { createContext, useContext, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { loginSuccess, loginFailure, logoutSuccess } from '../redux/actions/authActions';
+import { useRouter } from 'next/router';
 
 const AuthContext = createContext();
 
@@ -11,6 +11,7 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const loginAuth = (userData) => {
@@ -26,10 +27,15 @@ export function AuthProvider({ children }) {
       .then((data) => {
         console.log(data, "data auth context") // debugging
         dispatch(loginSuccess(data.username, data.authentication_token))
+        if (data.authentication_token) {
+          router.push('/home')
+        } else {
+          console.log("No auth token")
+        }
       })
       .catch((error) => {
         console.log(error, "in login")
-        dispatch(loginFailure()) 
+        dispatch(loginFailure())
       });
   };
 
