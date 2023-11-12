@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/navigation/navbar';
 import { useAuth } from '../../contexts/authContext';
 import { getRestaurants } from '../../api';
+import RestaurantCard from '../../components/card/restaurantCard';
 import {
   Typography,
   TextField,
@@ -22,20 +23,6 @@ const HomeContainer = styled(Container)(({ theme }) => ({
 
 const SearchBar = styled(TextField)(({ theme }) => ({
   marginBottom: theme.spacing(2),
-}));
-
-const RestaurantCard = styled(Card)(({ theme }) => ({
-  maxWidth: 345,
-}));
-
-const CardMediaImage = styled(CardMedia)(({ theme }) => ({
-  height: 200,
-}));
-
-const CardContentCentered = styled(CardContent)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
 }));
 
 export default function Home(props) {
@@ -81,10 +68,10 @@ export default function Home(props) {
     <>
       <Navbar logout={props.handleLogout} />
       <HomeContainer>
-        <Typography variant="h2" gutterBottom>
+        <Typography variant="h2" align='left' gutterBottom>
           Welcome to EATS.
         </Typography>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h5" align='left' gutterBottom>
           Here are some food options near you. Search below to personalize your results.
         </Typography>
         <SearchBar
@@ -98,30 +85,7 @@ export default function Home(props) {
           {restaurants && restaurants.length > 0 ? (
             restaurants.map((restaurant) => (
               <Grid item key={restaurant.id} xs={12} sm={6} md={4}>
-                <RestaurantCard>
-                  <CardActionArea>
-                    <CardMediaImage
-                      component="img"
-                      alt={restaurant.name}
-                      image={restaurant.image_url || 'https://www.officespacesny.com/wp-content/themes/realestate-7/images/no-image.png'}
-                    />
-                    <CardContentCentered>
-                      <Typography variant="h5" component="div">
-                        {restaurant.name}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        {restaurant.categories.map((category) => category.title).join(', ')}
-                      </Typography>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => props.handleMoreInfo(restaurant)}
-                      >
-                        More Info
-                      </Button>
-                    </CardContentCentered>
-                  </CardActionArea>
-                </RestaurantCard>
+                <RestaurantCard restaurant={restaurant} handleMoreInfo={props.handleMoreInfo} />
               </Grid>
             ))
           ) : (
@@ -131,8 +95,8 @@ export default function Home(props) {
       </HomeContainer>
       <footer>
         <div>
-          <Typography variant="h6">EATS</Typography>
-          <Typography variant="body2">Flatiron School Capstone Project 2021</Typography>
+          <Typography variant="h6" align='center'>EATS</Typography>
+          <Typography variant="body2" align='center'>Flatiron School Capstone Project 2021</Typography>
         </div>
       </footer>
     </>

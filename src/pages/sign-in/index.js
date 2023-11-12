@@ -32,7 +32,7 @@ export default function SignIn() {
 
     try {
       await loginAuth(user)
-      router.push('/home')
+      // router.push('/home')
     } catch (error) {
       console.error('Login failed:', error);
     }
