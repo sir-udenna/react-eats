@@ -1,6 +1,6 @@
 // "use client"
 import React, { createContext, useContext, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginSuccess, loginFailure, logoutSuccess } from '../redux/actions/authActions';
 import { useRouter } from 'next/router';
 
@@ -14,6 +14,18 @@ export function AuthProvider({ children }) {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  const testValue = useSelector(state => state.auth.user);
+  console.log(testValue)
+
+  const confirmAuthenticationToken = () => {
+    if (data.authentication_token) {
+      // router.push('/home')
+      console.log(localStorage.getItem("token"))
+    } else {
+      console.log("No auth token")
+    }
+  }
+
   const loginAuth = (userData) => {
     fetch("http://localhost:3000/users/sign_in", {
       method: 'POST',
@@ -25,16 +37,13 @@ export function AuthProvider({ children }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data, "data auth context") // debugging
+        localStorage.setItem("token", data.authentication_token)
         dispatch(loginSuccess(data.username, data.authentication_token))
-        if (data.authentication_token) {
-          router.push('/home')
-        } else {
-          console.log("No auth token")
-        }
+        console.log(testValue)
+
       })
       .catch((error) => {
-        console.log(error, "in login")
+        console.log("Login error.. LoginAuth:" ,error)
         dispatch(loginFailure())
       });
   };
@@ -49,7 +58,7 @@ export function AuthProvider({ children }) {
     })
       .then(() => {
         dispatch(logoutSuccess());
-        router.push('/login');
+        // router.push('/login');
       })
       .catch((error) => {
         console.log(error)

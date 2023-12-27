@@ -12,23 +12,6 @@ import RestaurantIcon from '@mui/icons-material/Restaurant';
 
 const theme = createTheme();
 
-const SplashContainer = styled('div')({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  minHeight: '100vh',
-  background: 'url(https://source.unsplash.com/1000x1000/?food) no-repeat center center fixed',
-  backgroundSize: 'cover',
-});
-
-const SplashContent = styled('div')({
-  backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent white background
-  padding: '2rem',
-  borderRadius: '8px',
-  textAlign: 'center',
-});
-
 //Splash screen
 export default function Homepage() {
   const router = useRouter();

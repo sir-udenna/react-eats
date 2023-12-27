@@ -37,7 +37,7 @@ const UserMenuIcon = styled(AccountCircleIcon)({
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
-  const [searchTerm, setSearchTerm] = useState(''); 
+  const [searchTerm, setSearchTerm] = useState('');
 
   const { user, logout } = useAuth();
 
