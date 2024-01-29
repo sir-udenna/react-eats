@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
   const dispatch = useDispatch();
 
   const testValue = useSelector(state => state.auth.user);
-  console.log(testValue)
+  // console.log(testValue)
 
   const confirmAuthenticationToken = () => {
     if (data.authentication_token) {

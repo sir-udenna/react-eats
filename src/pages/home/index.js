@@ -32,12 +32,14 @@ export default function Home() {
         <Typography variant="h5" align='center' color="textSecondary" paragraph>
           Here are some food options near you. Search below to personalize your results.
         </Typography>
+
         <FoodSearchBar />
+        
         <Grid container spacing={4}>
           {restaurants && restaurants.length > 0 ? (
             restaurants.map((restaurant) => (
               <Grid item key={restaurant.id} xs={12} sm={6} md={4}>
-                <RestaurantCard restaurant={restaurant} handleMoreInfo={props.handleMoreInfo} />
+                <RestaurantCard restaurant={restaurant} />
               </Grid>
             ))
           ) : (
@@ -45,6 +47,7 @@ export default function Home() {
           )}
         </Grid>
       </HomeContainer>
+
       <footer>
         <Typography variant="h6" align='center' gutterBottom>
           EATS

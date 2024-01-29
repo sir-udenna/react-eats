@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getRestaurants } from '../../middlewear';
-import {
-  TextField,
-  styled,
-} from '@mui/material';
+import {TextField, styled} from '@mui/material';
 import { useDispatch } from 'react-redux';
 
 
@@ -35,14 +32,16 @@ export const FoodSearchBar = () => {
     }
   };
 
-  const fetchData = async (latitude, longitude) => {
-    try {
-      const data = await getRestaurants(latitude, longitude, searchTerm, null, true, 'best_match');
-      dispatch(data.businesses);
-    } catch (error) {
-      console.error('Error fetching restaurant data:', error);
-    }
+  const fetchData = (latitude, longitude) => {
+    getRestaurants(latitude, longitude, searchTerm, null, true, 'best_match', dispatch)
+      .then(data => {
+        // dispatch(data.businesses);
+      })
+      .catch(error => {
+        console.error('Error fetching restaurant data:', error);
+      });
   };
+
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
