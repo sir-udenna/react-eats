@@ -65,11 +65,6 @@ export function AuthProvider({ children }) {
       });
   };
 
-  const value = {
-    loginAuth,
-    logout,
-  };
-
   return (
     <AuthContext.Provider value={{ loginAuth, logout }}>
       {children}
